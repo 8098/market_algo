@@ -67,42 +67,41 @@ def db_insert(symbol, data):
     print("Finished inserting to database...")
 
 def main():
-    db_insert("test", "test")
-    # for row in quandl_symbols:
-    #     try:
-    #         data = get_data(row)
-    #
-    #         sum_close = 0
-    #         sum_volume = 0
-    #         sum_open_interest = 0
-    #         candle_height = 0
-    #         count = 0
-    #
-    #         for row2 in data:
-    #             try:
-    #                 print(row2)
-    #                 sum_close += row2[4]
-    #                 sum_volume += row2[5]
-    #                 sum_open_interest += row2[6]
-    #                 candle_height += (row2[2] - row2[3])/row2[4]
-    #                 count += 1
-    #             except Exception as e:
-    #                 print("Error at main " + row2)
-    #                 pass
-    #
-    #         average_close = sum_close/count
-    #         average_volume = sum_volume / count
-    #         average_open_interest = sum_open_interest / count
-    #         average_candle_height = candle_height/count*100
-    #         print("Average Close: ", average_close)
-    #         print("Average Volume: ", average_volume)
-    #         print("Average Open Interest: ", average_open_interest)
-    #         print("Average Candle Height: ", average_candle_height)
-    #
-    #         db_insert(row, data)
-    #     except Exception as e:
-    #         print("Error at main " + row)
-    #         pass
+    for row in quandl_symbols:
+        try:
+            data = get_data(row)
+
+            sum_close = 0
+            sum_volume = 0
+            sum_open_interest = 0
+            candle_height = 0
+            count = 0
+
+            for row2 in data:
+                try:
+                    print(row2)
+                    sum_close += row2[4]
+                    sum_volume += row2[5]
+                    sum_open_interest += row2[6]
+                    candle_height += (row2[2] - row2[3])/row2[4]
+                    count += 1
+                except Exception as e:
+                    print("Error at main " + row2)
+                    pass
+
+            average_close = sum_close/count
+            average_volume = sum_volume / count
+            average_open_interest = sum_open_interest / count
+            average_candle_height = candle_height/count*100
+            print("Average Close: ", average_close)
+            print("Average Volume: ", average_volume)
+            print("Average Open Interest: ", average_open_interest)
+            print("Average Candle Height: ", average_candle_height)
+
+            db_insert(row, data)
+        except Exception as e:
+            print("Error at main " + row)
+            pass
 
 
 main()
