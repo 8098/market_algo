@@ -34,7 +34,6 @@ def get_data(instrument):
             print("Error at get_data " + row)
             pass
 
-    # return dates, opens, highs, lows, closes, volumes, open_interests
     return data
 
 
@@ -46,19 +45,31 @@ def main():
             data = get_data(row)
 
             sum_close = 0
+            sum_volume = 0
+            sum_open_interest = 0
+            candle_height = 0
             count = 0
 
             for row2 in data:
                 try:
                     print(row2)
                     sum_close += row2[4][1]
+                    sum_volume += row2[5][1]
+                    sum_open_interest += row2[6][1]
+                    candle_height += (row2[2][1] - row2[3][1])/row2[4][1]
                     count += 1
                 except Exception as e:
                     print("Error at main " + row2)
                     pass
 
             average_close = sum_close/count
-            print(average_close)
+            average_volume = sum_volume / count
+            average_open_interest = sum_open_interest / count
+            average_candle_height = candle_height/count*100
+            print("Average Close: ", average_close)
+            print("Average Volume: ", average_volume)
+            print("Average Open Interest: ", average_open_interest)
+            print("Average Candle Height: ", average_candle_height)
         except Exception as e:
             print("Error at main " + row)
             pass
