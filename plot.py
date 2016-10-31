@@ -1,48 +1,67 @@
 import matplotlib.pyplot as plt
 import quandl
-from matplotlib.finance import candlestick2_ochl
 
-print("Retrieving data ...")
 
-data = quandl.get("CHRIS/CME_GC1", start_date="2016-01-01", end_date="2016-10-07")
-data = data.to_dict(orient='index')
+def get_data(instrument):
+    print("Retrieving data for " + instrument)
 
-series = []
-dates = []
-opens = []
-highs = []
-lows = []
-closes = []
-volumes = []
-open_interests = []
+    quandl.ApiConfig.api_key = 'gzBJon8Nc6pbn6WytL_H'
+    quandl_data = quandl.get(instrument, start_date="2016-10-03", end_date="2016-10-07")
+    quandl_data = quandl_data.to_dict(orient='index')
 
-for row in data:
-    try:
-        series.append((row, data[row]['Open'], data[row]['High'], data[row]['Low'], data[row]['Last']
-                       , data[row]['Volume'], data[row]['Open Interest']))
-    except Exception as e:
-        print("error at " + row)
-        pass
+    series = []
+    data = []
 
-series.sort()
+    for row in quandl_data:
+        try:
+            series.append([('date', row)
+                              , ('open', quandl_data[row]['Open'])
+                              , ('high', quandl_data[row]['High'])
+                              , ('low', quandl_data[row]['Low'])
+                              , ('close', quandl_data[row]['Last'])
+                              , ('volume', int(quandl_data[row]['Volume']))
+                              , ('open_interest', int(quandl_data[row]['Open Interest']))])
+        except Exception as e:
+            print("Error at get_data " + row)
+            pass
 
-for row in series:
-    try:
-        dates.append(row[0])
-        opens.append(row[1])
-        highs.append(row[2])
-        lows.append(row[3])
-        closes.append(row[4])
-        volumes.append(row[5])
-        open_interests.append(row[6])
-    except Exception as e:
-        print("error at " + row)
-        pass
+    series.sort()
 
-print(dates, closes)
+    for row in series:
+        try:
+            data.append(row)
+        except Exception as e:
+            print("Error at get_data " + row)
+            pass
 
-# ax = plt.subplots()
-# candlestick2_ochl(ax, opens, closes, highs, lows, width=4, colorup='k', colordown='r', alpha=0.75)
+    # return dates, opens, highs, lows, closes, volumes, open_interests
+    return data
 
-plt.plot(dates, closes)
-plt.show()
+
+def main():
+    instruments = ["CHRIS/CME_GC1", "CHRIS/CME_CL1"]
+
+    for row in instruments:
+        try:
+            data = get_data(row)
+
+            sum_close = 0
+            count = 0
+
+            for row2 in data:
+                try:
+                    print(row2)
+                    sum_close += row2[4][1]
+                    count += 1
+                except Exception as e:
+                    print("Error at main " + row2)
+                    pass
+
+            average_close = sum_close/count
+            print(average_close)
+        except Exception as e:
+            print("Error at main " + row)
+            pass
+
+
+main()
