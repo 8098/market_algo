@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="SQL Server (Microsoft) - jjc_pi_algo1@kbhrcg0k88.database.windows.net" uuid="2754f868-d772-4194-bdb5-9543939fad91">
-      <driver-ref>sqlserver.ms</driver-ref>
-      <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
-      <jdbc-url>jdbc:sqlserver://kbhrcg0k88.database.windows.net:1433;databaseName=jjc_pi_algo1</jdbc-url>
+    <data-source source="LOCAL" name="PostgreSQL - pi_algo1@138.68.15.146" uuid="49003d4d-b697-4759-ae02-4ab8a4594c9e">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://138.68.15.146:5432/pi_algo1</jdbc-url>
     </data-source>
   </component>
 </project>
