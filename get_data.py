@@ -16,12 +16,14 @@ def get_data(symbol):
 
     for row in quandl_data:
         try:
-            series.append([row, quandl_data[row]['Open']
-                          , quandl_data[row]['High']
-                          , quandl_data[row]['Low']
-                          , quandl_data[row]['Last']
-                          , int(quandl_data[row]['Volume'])
-                          , int(quandl_data[row]['Open Interest'])])
+            series.append([row
+              , quandl_data[row]['Open'] if "nan" not in str(quandl_data[row]['Open']) else 0
+              , quandl_data[row]['High'] if "nan" not in str(quandl_data[row]['High']) else 0
+              , quandl_data[row]['Low'] if "nan" not in str(quandl_data[row]['Low']) else 0
+              , quandl_data[row]['Last'] if "nan" not in str(quandl_data[row]['Last']) else 0
+              , quandl_data[row]['Open'] if "nan" not in str(quandl_data[row]['Open']) else 0
+              , int(quandl_data[row]['Volume']) if "nan" not in str(quandl_data[row]['Volume']) else 0
+              , int(quandl_data[row]['Open Interest']) if "nan" not in str(quandl_data[row]['Open Interest']) else 0])
         except Exception as e:
             print("Error at get_data " + row)
 
@@ -44,14 +46,14 @@ def db_insert(symbol, data):
 
     count = 0
     for row in data:
-        print(symbol, row[0], row[1], row[2], row[3], row[4], row[5], row[6])
+        # print(symbol, row[0], row[1], row[2], row[3], row[4], row[5], row[6])
         cursor.execute("""INSERT INTO dataimport (symbol, timestamp, open, high, low, close, volume, openinterest) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);"""
                        , (symbol, row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
         count += 1
 
     sql_connection.commit()
     sql_connection.close()
-    print("Finished inserting" + str(count) + "rows to database...")
+    print("Finished inserting " + str(count) + " rows to database...")
 
 
 def db_truncate():
