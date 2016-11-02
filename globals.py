@@ -7,7 +7,7 @@ quandl_symbols = ["CHRIS/CME_ES1", "CHRIS/CME_NQ1", "CHRIS/CME_YM1"
                     , "CHRIS/CME_SF1", "CHRIS/CME_MP1"]
 
 quandl_api_key = 'gzBJon8Nc6pbn6WytL_H'
-quandl_start_date = '2016-11-01'
+quandl_start_date = '1900-01-01'
 quandl_end_date = '2016-12-31'
 
 host = '138.68.15.146'
