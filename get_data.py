@@ -21,7 +21,6 @@ def get_data(symbol):
               , quandl_data[row]['High'] if "nan" not in str(quandl_data[row]['High']) else 0
               , quandl_data[row]['Low'] if "nan" not in str(quandl_data[row]['Low']) else 0
               , quandl_data[row]['Last'] if "nan" not in str(quandl_data[row]['Last']) else 0
-              , quandl_data[row]['Open'] if "nan" not in str(quandl_data[row]['Open']) else 0
               , int(quandl_data[row]['Volume']) if "nan" not in str(quandl_data[row]['Volume']) else 0
               , int(quandl_data[row]['Open Interest']) if "nan" not in str(quandl_data[row]['Open Interest']) else 0])
         except Exception as e:
