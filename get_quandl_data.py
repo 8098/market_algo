@@ -46,7 +46,7 @@ def db_insert(symbol, data):
     count = 0
     for row in data:
         # print(symbol, row[0], row[1], row[2], row[3], row[4], row[5], row[6])
-        cursor.execute("""INSERT INTO dataimport (symbol, timestamp, open, high, low, close, volume, openinterest) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);"""
+        cursor.execute("""INSERT INTO quandlimport (symbol, timestamp, open, high, low, close, volume, openinterest) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);"""
                        , (symbol, row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
         count += 1
 
@@ -60,7 +60,7 @@ def db_truncate():
 
     sql_connection = psycopg2.connect(host=host, port=port, user=user, database=database)
     cursor = sql_connection.cursor()
-    cursor.execute("""TRUNCATE TABLE dataimport;""")
+    cursor.execute("""TRUNCATE TABLE quandlimport;""")
     sql_connection.commit()
     sql_connection.close()
     print("Finished truncating dataimport table...")
