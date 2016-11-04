@@ -8,7 +8,7 @@ closes = []
 
 sql_connection = psycopg2.connect(host=host, port=port, user=user, database=database)
 cursor = sql_connection.cursor()
-cursor.execute("SELECT timestamp, close FROM foreximport WHERE symbol = 'usdjpy' AND date >= '2016-10-29';")
+cursor.execute("SELECT timestamp, close FROM foreximport WHERE symbol = 'usdjpy';")
 data = cursor.fetchall()
 sql_connection.commit()
 sql_connection.close()

@@ -6,7 +6,7 @@ directory = 'C:/Users/jcampana/Desktop/Data'
 
 sql_connection = psycopg2.connect(host=host, port=port, user=user, database=database)
 cursor = sql_connection.cursor()
-cursor.execute("TRUNCATE TABLE foreximport;")
+cursor.execute("TRUNCATE TABLE foreximport RESTART IDENTITY;")
 sql_connection.commit()
 sql_connection.close()
 print("Truncated table foreximport")
@@ -39,7 +39,8 @@ for root, dirs, filenames in os.walk(directory):
         sql_connection = psycopg2.connect(host=host, port=port, user=user, database=database)
         cursor = sql_connection.cursor()
         cursor.execute(
-            "INSERT INTO foreximport SELECT symbol, timestamp, timestamp::date, timestamp::time"
+            "INSERT INTO foreximport (symbol, timestamp, date, time, open, high, low, close, import)"
+            "SELECT symbol, timestamp, timestamp::date, timestamp::time"
             ", open, high, low, close, NOW() FROM foreximporttemp WHERE timestamp::date >= '2006-01-01';")
         sql_connection.commit()
         sql_connection.close()
