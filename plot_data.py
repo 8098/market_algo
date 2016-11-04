@@ -1,7 +1,6 @@
 from globals import *
 import psycopg2
 import matplotlib.pyplot as plt
-import matplotlib.ticker as tick
 
 
 dates = []
