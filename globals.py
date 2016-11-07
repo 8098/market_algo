@@ -14,3 +14,8 @@ host = '138.68.15.146'
 port = 5432
 database = 'pi_algo1'
 user = 'pi_algo1'
+
+# server = 'ayjnzz6r62.database.windows.net'
+# user = 'slampana@ayjnzz6r62'
+# password = 'LukeSkywalker!'
+# database = 'pialgo1_db'

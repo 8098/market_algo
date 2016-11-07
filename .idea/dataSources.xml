@@ -7,5 +7,10 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://138.68.15.146:5432/pi_algo1</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="SQL Server (Microsoft) - pialgo1_db@ayjnzz6r62.database.windows.net" uuid="caaada8c-635a-4dc7-b259-858fdb5e49a5">
+      <driver-ref>sqlserver.ms</driver-ref>
+      <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
+      <jdbc-url>jdbc:sqlserver://ayjnzz6r62.database.windows.net:1433;databaseName=pialgo1_db</jdbc-url>
+    </data-source>
   </component>
 </project>
