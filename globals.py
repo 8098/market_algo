@@ -15,6 +15,8 @@ port = 5432
 database = 'pi_algo1'
 user = 'pi_algo1'
 
+data_directory = 'C:/Users/jcampana/Desktop/Data'
+
 # server = 'ayjnzz6r62.database.windows.net'
 # user = 'slampana@ayjnzz6r62'
 # password = 'LukeSkywalker!'
