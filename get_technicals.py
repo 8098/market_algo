@@ -104,7 +104,7 @@ def main():
     insert_db(df, table_name)
 
     end_time = datetime.datetime.now()
-    duration = (end_time - start_time).days * 24 * 60
+    duration = (end_time - start_time).total_seconds() / 60
     print("Finished in " + str(duration) + " minutes")
 
 main()
