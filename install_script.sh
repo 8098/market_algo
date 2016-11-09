@@ -1,6 +1,8 @@
 #! /bin/sh
 sudo apt-get update \
 && sudo apt-get upgrade -y \
+&& sudo mv /var/lib/dpkg/info/udev.postinst /var/lib/dpkg/info/udev.postinst.backup \
+&& sudo apt-get install -f \
 && sudo apt-get install postgresql-server-dev-all python3-dev -y \
 && sudo pip3 install --upgrade pip \
 && mkdir downloads \

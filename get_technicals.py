@@ -11,7 +11,7 @@ table_name = 'forexanalysis1'
 
 
 def create_table(table):
-    sql_connection = psycopg2.connect(host=host, port=port, user=user, database=database)
+    sql_connection = psycopg2.connect(host=host, port=port, user=user, password=password, database=database)
     cursor = sql_connection.cursor()
     cursor.execute("""CREATE TABLE public.""" + table + """ (
         id INTEGER PRIMARY KEY NOT NULL,
@@ -39,7 +39,7 @@ def create_table(table):
 
 def get_data():
     print("Getting raw data for foreximport")
-    sql_connection = psycopg2.connect(host=host, port=port, user=user, database=database)
+    sql_connection = psycopg2.connect(host=host, port=port, user=user, password=password, database=database)
     sql = "SELECT * FROM foreximport;"
     data_frame = pd.read_sql(sql, sql_connection)
 
@@ -57,7 +57,7 @@ def get_data():
 
 def insert_db(df, table):
     print("Inserting to: " + table)
-    sql_connection = psycopg2.connect(host=host, port=port, user=user, database=database)
+    sql_connection = psycopg2.connect(host=host, port=port, user=user, password=password, database=database)
     cursor = sql_connection.cursor()
 
     data_dict = df.to_dict(orient='index')

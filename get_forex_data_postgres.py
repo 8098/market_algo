@@ -1,10 +1,11 @@
 from globals import *
 import psycopg2
 import os
+import datetime
 
 
 def truncate_db():
-    sql_connection = psycopg2.connect(host=host, port=port, user=user, database=database)
+    sql_connection = psycopg2.connect(host=host, port=port, user=user, password=password, database=database)
     cursor = sql_connection.cursor()
     cursor.execute("TRUNCATE TABLE foreximport RESTART IDENTITY;")
     sql_connection.commit()
@@ -18,7 +19,7 @@ def insert_db(directory):
             symbol = f[:6]
             full_filename = directory + '/' + f
 
-            sql_connection = psycopg2.connect(host=host, port=port, user=user, database=database)
+            sql_connection = psycopg2.connect(host=host, port=port, user=user, password=password, database=database)
             cursor = sql_connection.cursor()
             cursor.execute("TRUNCATE TABLE foreximporttemp;")
             sql_connection.commit()
@@ -26,7 +27,7 @@ def insert_db(directory):
             print("Truncated table foreximporttemp")
 
             print("Inserting data for: " + symbol)
-            sql_connection = psycopg2.connect(host=host, port=port, user=user, database=database)
+            sql_connection = psycopg2.connect(host=host, port=port, user=user, password=password, database=database)
             cursor = sql_connection.cursor()
             csv = open(full_filename, 'r')
             cursor.copy_from(csv, 'foreximporttemp (timestamp, open, high, low, close)', sep=',')
@@ -38,7 +39,7 @@ def insert_db(directory):
             sql_connection.close()
 
             print("Inserting data to foreximport")
-            sql_connection = psycopg2.connect(host=host, port=port, user=user, database=database)
+            sql_connection = psycopg2.connect(host=host, port=port, user=user, password=password, database=database)
             cursor = sql_connection.cursor()
             cursor.execute(
                 "INSERT INTO foreximport (symbol, timestamp, date, time, open, high, low, close, import)"
@@ -49,8 +50,15 @@ def insert_db(directory):
 
 
 def main():
+    start_time = datetime.datetime.now()
+    print("Started at " + str(start_time))
+    
     truncate_db()
     insert_db(data_directory)
+    
+    end_time = datetime.datetime.now()
+    duration = (end_time - start_time).total_seconds() / 60
+    print("Finished in " + str(duration) + " minutes")
 
 
 main()
