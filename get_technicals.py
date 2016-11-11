@@ -7,7 +7,7 @@ import file_iterator as fi
 import datetime
 
 
-table_name = 'forexanalysis1'
+table_name = 'analysis1'
 
 
 def create_table(table):
@@ -16,13 +16,13 @@ def create_table(table):
     cursor.execute("""CREATE TABLE public.""" + table + """ (
         id INTEGER PRIMARY KEY NOT NULL,
         symbol VARCHAR(10),
-        timestamp TIMESTAMP,
-        date DATE,
-        time TIME,
-        open NUMERIC,
-        high NUMERIC,
-        low NUMERIC,
-        close NUMERIC,
+        p_timestamp TIMESTAMP,
+        p_date DATE,
+        p_time TIME,
+        p_open NUMERIC,
+        p_high NUMERIC,
+        p_low NUMERIC,
+        p_close NUMERIC,
         import TIMESTAMP,
         ema NUMERIC,
         rsi NUMERIC,
@@ -38,19 +38,19 @@ def create_table(table):
 
 
 def get_data():
-    print("Getting raw data for foreximport")
+    print("Getting raw data from import_qc")
     sql_connection = psycopg2.connect(host=host, port=port, user=user, password=password, database=database)
-    sql = "SELECT * FROM foreximport;"
+    sql = "SELECT * FROM import_qc;"
     data_frame = pd.read_sql(sql, sql_connection)
 
     print("Getting technicals")
-    data_frame['ema'] = ta.EMA(np.array(data_frame.close), timeperiod=100)
-    data_frame['rsi'] = ta.RSI(np.array(data_frame.close), timeperiod=10)
+    data_frame['ema'] = ta.EMA(np.array(data_frame.p_close), timeperiod=100)
+    data_frame['rsi'] = ta.RSI(np.array(data_frame.p_close), timeperiod=10)
     data_frame['slow_rsi'] = ta.EMA(np.array(data_frame.rsi), timeperiod=10)
-    data_frame['roc'] = ta.ROC(np.array(data_frame.close), timeperiod=10)
+    data_frame['roc'] = ta.ROC(np.array(data_frame.p_close), timeperiod=10)
     data_frame['slow_roc'] = ta.EMA(np.array(data_frame.roc), timeperiod=10)
-    data_frame['mama'], data_frame['fama'] = ta.MAMA(np.array(data_frame.close), fastlimit=0.5, slowlimit=0.05)
-    data_frame['ht_trend'] = ta.HT_TRENDLINE(np.array(data_frame.close))
+    data_frame['mama'], data_frame['fama'] = ta.MAMA(np.array(data_frame.p_close), fastlimit=0.5, slowlimit=0.05)
+    data_frame['ht_trend'] = ta.HT_TRENDLINE(np.array(data_frame.p_close))
 
     return data_frame
 
@@ -67,13 +67,13 @@ def insert_db(df, table):
     for row in data_dict.values():
         series.append(((row['id']
            , row['symbol']
-           , row['timestamp']
-           , row['date']
-           , row['time']
-           , row['open']
-           , row['high']
-           , row['low']
-           , row['close']
+           , row['p_timestamp']
+           , row['p_date']
+           , row['p_time']
+           , row['p_open']
+           , row['p_high']
+           , row['p_low']
+           , row['p_close']
            , row['import']
            , row['ema'] if "nan" not in str(row['ema']) else 0
            , row['rsi'] if "nan" not in str(row['rsi']) else 0
