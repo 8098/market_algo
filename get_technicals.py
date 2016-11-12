@@ -37,11 +37,22 @@ def create_table(table):
     print("Created new table: " + table)
 
 
-def get_data():
-    print("Getting raw data from import_qc")
+def get_row_count():
+    print("Getting row counts from import_qc")
     sql_connection = psycopg2.connect(host=host, port=port, user=user, password=password, database=database)
-    sql = "SELECT * FROM import_qc;"
+    cursor = sql_connection.cursor()
+    cursor.execute( """SELECT MIN(id) "min", MAX(id) "max" FROM import_qc;""")
+    row_counts = cursor.fetchone()
+
+    return row_counts
+
+
+def get_data(start, end):
+    print("Getting raw data from import_qc for rows " + start + " - " + end)
+    sql_connection = psycopg2.connect(host=host, port=port, user=user, password=password, database=database)
+    sql = "SELECT i.* FROM import_qc AS i LEFT OUTER JOIN start_dates AS d ON i.symbol = d.symbol WHERE i.p_date >= d.start_date AND i.id >= " + start + " AND i.id < " + end + ";"
     data_frame = pd.read_sql(sql, sql_connection)
+    sql_connection.close()
 
     print("Getting technicals")
     data_frame['ema'] = ta.EMA(np.array(data_frame.p_close), timeperiod=100)
@@ -100,8 +111,18 @@ def main():
     print("Started at " + str(start_time))
 
     create_table(table_name)
-    df = get_data()
-    insert_db(df, table_name)
+    
+    row_counts = get_row_count()
+    first_row = row_counts[0]
+    last_row = row_counts[1]
+    end = 0
+    
+    for start in range(first_row, last_row, 100000):
+        end += 100000
+        if end > last_row:
+            end = last_row
+        df = get_data(str(start), str(end))
+        insert_db(df, table_name)
 
     end_time = datetime.datetime.now()
     duration = (end_time - start_time).total_seconds() / 60
