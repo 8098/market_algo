@@ -46,8 +46,7 @@ def insert_db(directory):
             data_csv.close()
             sql_connection.commit()
 
-            cursor.execute("""UPDATE import_qc_temp SET symbol = '%s'
-                , p_pst_timestamp = p_timestamp + INTERVAL '7 hours';""" %symbol)
+            cursor.execute("""UPDATE import_qc_temp SET symbol = '%s';""" %symbol)
             sql_connection.commit()
             sql_connection.close()
 
@@ -56,7 +55,7 @@ def insert_db(directory):
             cursor = sql_connection.cursor()
             cursor.execute(
                 "INSERT INTO import_qc (symbol, p_timestamp, p_date, p_time, p_open, p_high, p_low, p_close, import)"
-                "SELECT symbol, p_pst_timestamp, p_pst_timestamp::date, p_pst_timestamp::time"
+                "SELECT symbol, p_timestamp, p_timestamp::date, p_timestamp::time"
                 ", p_open, p_high, p_low, p_close, NOW() FROM import_qc_temp;")
             sql_connection.commit()
             sql_connection.close()
