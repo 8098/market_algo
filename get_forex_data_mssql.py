@@ -43,6 +43,11 @@ def insert_db(directory):
             sql_connection = pymssql.connect(server=ms_server, user=ms_user, password=ms_password, database=ms_database)
             cursor = sql_connection.cursor()
             
+            # cursor.execute("""BULK INSERT Import_QC_Temp FROM '/root/algo1/test_data/audusd.csv'
+            #     WITH (FIELDTERMINATOR=',', ROWTERMINATOR='\n');""")
+            # sql_connection.commit()
+            # sql_connection.close()
+            
             with open(full_filename, 'r') as csv_file:
                 reader = csv.reader(csv_file)
                 for row in reader:
