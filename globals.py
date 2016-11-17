@@ -1,4 +1,9 @@
-data_directory = './data_qc'
+data_directory = './test_data'
+
+ms_server = '138.68.46.185'
+ms_user = 'sa'
+ms_password = 'LukeSkywalker!'
+ms_database = 'algo1'
 
 host = 'ec2-54-243-202-174.compute-1.amazonaws.com'
 port = 5432
