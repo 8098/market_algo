@@ -1,4 +1,4 @@
-data_directory = './test_data'
+data_directory = './data_qc'
 
 ms_server = '138.68.46.185'
 ms_user = 'sa'

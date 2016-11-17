@@ -1,5 +1,4 @@
 psycopg2
-pymssql
 numpy
 pandas
 TA-Lib
