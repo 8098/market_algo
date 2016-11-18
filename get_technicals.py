@@ -7,7 +7,7 @@ import file_iterator as fi
 import datetime
 
 
-table_name = 'analysis1'
+table_name = 'complete_hour_1'
 
 
 def create_table(table):
@@ -38,24 +38,24 @@ def create_table(table):
 
 
 def get_row_count():
-    print("Getting row counts from import_qc")
+    print("Getting row counts from import_qc_hour")
     sql_connection = psycopg2.connect(host=host, port=port, user=user, password=password, database=database)
     cursor = sql_connection.cursor()
-    cursor.execute( """SELECT MIN(id) "min", MAX(id) "max" FROM import_qc;""")
+    cursor.execute( """SELECT MIN(id) "min", MAX(id) "max" FROM import_qc_hour;""")
     row_counts = cursor.fetchone()
 
     return row_counts
 
 
 def get_data(start, end):
-    print("Getting raw data from import_qc for rows " + start + " - " + end)
+    print("Getting raw data from import_qc_hour for rows " + start + " - " + end)
     sql_connection = psycopg2.connect(host=host, port=port, user=user, password=password, database=database)
-    sql = "SELECT i.* FROM import_qc AS i LEFT OUTER JOIN start_dates AS d ON i.symbol = d.symbol WHERE i.p_date >= d.start_date AND i.id >= " + start + " AND i.id < " + end + ";"
+    sql = "SELECT i.* FROM import_qc_hour AS i LEFT OUTER JOIN start_dates AS d ON i.symbol = d.symbol WHERE i.p_date >= d.start_date AND i.id >= " + start + " AND i.id < " + end + ";"
     data_frame = pd.read_sql(sql, sql_connection)
     sql_connection.close()
 
     print("Getting technicals")
-    data_frame['ema'] = ta.EMA(np.array(data_frame.p_close), timeperiod=100)
+    data_frame['ema'] = ta.EMA(np.array(data_frame.p_close), timeperiod=10)
     data_frame['rsi'] = ta.RSI(np.array(data_frame.p_close), timeperiod=10)
     data_frame['slow_rsi'] = ta.EMA(np.array(data_frame.rsi), timeperiod=10)
     data_frame['roc'] = ta.ROC(np.array(data_frame.p_close), timeperiod=10)

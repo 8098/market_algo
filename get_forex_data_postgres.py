@@ -8,10 +8,10 @@ import csv
 def truncate_db():
     sql_connection = psycopg2.connect(host=host, port=port, user=user, password=password, database=database)
     cursor = sql_connection.cursor()
-    cursor.execute("TRUNCATE TABLE import_qc RESTART IDENTITY;")
+    cursor.execute("TRUNCATE TABLE import_qc_hour RESTART IDENTITY;")
     sql_connection.commit()
     sql_connection.close()
-    print("Truncated table import_qc")
+    print("Truncated table import_qc_hour")
 
 
 def insert_db(directory):
@@ -33,30 +33,30 @@ def insert_db(directory):
 
             sql_connection = psycopg2.connect(host=host, port=port, user=user, password=password, database=database)
             cursor = sql_connection.cursor()
-            cursor.execute("TRUNCATE TABLE import_qc_temp;")
+            cursor.execute("TRUNCATE TABLE import_qc_hour_temp;")
             sql_connection.commit()
             sql_connection.close()
-            print("Truncated table import_qc_temp")
+            print("Truncated table import_qc_hour_temp")
 
             print("Inserting data for: " + symbol)
             sql_connection = psycopg2.connect(host=host, port=port, user=user, password=password, database=database)
             cursor = sql_connection.cursor()
             data_csv = open(full_filename, 'r')
-            cursor.copy_from(data_csv, 'import_qc_temp (p_timestamp, p_open, p_high, p_low, p_close)', sep=',')
+            cursor.copy_from(data_csv, 'import_qc_hour_temp (p_timestamp, p_open, p_high, p_low, p_close)', sep=',')
             data_csv.close()
             sql_connection.commit()
 
-            cursor.execute("""UPDATE import_qc_temp SET symbol = '%s';""" %symbol)
+            cursor.execute("""UPDATE import_qc_hour_temp SET symbol = '%s';""" %symbol)
             sql_connection.commit()
             sql_connection.close()
 
-            print("Inserting data to import_qc")
+            print("Inserting data to import_qc_hour")
             sql_connection = psycopg2.connect(host=host, port=port, user=user, password=password, database=database)
             cursor = sql_connection.cursor()
             cursor.execute(
-                "INSERT INTO import_qc (symbol, p_timestamp, p_date, p_time, p_open, p_high, p_low, p_close, import)"
+                "INSERT INTO import_qc_hour (symbol, p_timestamp, p_date, p_time, p_open, p_high, p_low, p_close, import)"
                 "SELECT symbol, p_timestamp, p_timestamp::date, p_timestamp::time"
-                ", p_open, p_high, p_low, p_close, NOW() FROM import_qc_temp;")
+                ", p_open, p_high, p_low, p_close, NOW() FROM import_qc_hour_temp;")
             sql_connection.commit()
             sql_connection.close()
 
